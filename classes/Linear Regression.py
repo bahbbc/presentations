@@ -18,7 +18,7 @@
 # 
 # ![Question](https://media.giphy.com/media/3o7buirYcmV5nSwIRW/giphy.gif)
 
-# In[41]:
+# In[147]:
 
 
 import pandas as pd
@@ -27,21 +27,21 @@ from sklearn.model_selection import train_test_split
 import sklearn
 import seaborn as sns
 import numpy as np
-get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().magic('matplotlib inline')
 
 
 # Vamos usar o [Boston Housing Dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/housing/) para prever valores de imóveis em Boston 
 
 # Primeiro carregue o dataset. Vamos dar uma roubada e usar o dataset da biblioteca do sklearn.
 
-# In[2]:
+# In[148]:
 
 
 from sklearn.datasets import load_boston
 boston = load_boston()
 
 
-# In[3]:
+# In[149]:
 
 
 print(boston)
@@ -51,7 +51,7 @@ print(boston)
 
 # Como vejo as chaves de um dicionário?
 
-# In[4]:
+# In[150]:
 
 
 print(boston.keys())
@@ -59,7 +59,7 @@ print(boston.keys())
 
 # Vamos verificar a chave que descreve como o dataset está estruturado. É a chave `DESCR`.
 
-# In[5]:
+# In[151]:
 
 
 print(boston.DESCR)
@@ -69,7 +69,7 @@ print(boston.DESCR)
 
 # Jeito 1 - Assim, não dá para ver os nomes dos atributos:
 
-# In[6]:
+# In[152]:
 
 
 boston_data = pd.DataFrame(boston.data)
@@ -78,13 +78,13 @@ boston_data.head()
 
 # Jeito 2 - Com os nomes dos atributos
 
-# In[7]:
+# In[153]:
 
 
 boston_data = pd.DataFrame(boston.data, columns=boston.feature_names)
 
 
-# In[8]:
+# In[154]:
 
 
 boston_data.head()
@@ -94,13 +94,13 @@ boston_data.head()
 
 # Primeiro precisamos colocar a variável resposta no dataset
 
-# In[9]:
+# In[155]:
 
 
 boston_data['target'] = boston.target
 
 
-# In[10]:
+# In[156]:
 
 
 boston_data.head()
@@ -108,7 +108,7 @@ boston_data.head()
 
 # Vamos ver se fizemos tudo certinho verificando o tamanho do Dataframe.
 
-# In[11]:
+# In[157]:
 
 
 boston_data.shape
@@ -125,7 +125,7 @@ boston_data.shape
 
 # ### Vamos dar uma olhada na variável resposta
 
-# In[12]:
+# In[158]:
 
 
 sns.distplot(boston_data.target)
@@ -137,7 +137,7 @@ sns.distplot(boston_data.target)
 
 # Inicialmente vamos ver a distribuição de cada variável com o `describe`
 
-# In[13]:
+# In[159]:
 
 
 boston_data.describe().T
@@ -169,7 +169,7 @@ boston_data.describe().T
 
 # Distribuição da variável
 
-# In[14]:
+# In[160]:
 
 
 sns.distplot(boston_data.RM)
@@ -177,7 +177,7 @@ sns.distplot(boston_data.RM)
 
 # Vamos testar a correlação dessa variável com o valor dos imóveis.
 
-# In[15]:
+# In[161]:
 
 
 _ = sns.regplot(x="RM", y="target", data=boston_data)
@@ -185,7 +185,7 @@ _ = sns.regplot(x="RM", y="target", data=boston_data)
 
 # Vamos ver a correlção de Pearson usando o método `corr` do pandas
 
-# In[16]:
+# In[162]:
 
 
 boston_data.target.corr(boston_data.RM)
@@ -195,20 +195,20 @@ boston_data.target.corr(boston_data.RM)
 
 # Precisamos separar o dataset em treino e teste e também pegar a variável resposta
 
-# In[17]:
+# In[163]:
 
 
 Y = boston_data['target']
 X = boston_data.RM.to_frame()
 
 
-# In[18]:
+# In[164]:
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
 
 
-# In[19]:
+# In[165]:
 
 
 from sklearn.linear_model import LinearRegression
@@ -221,13 +221,13 @@ Y_pred = lm.predict(X_test)
 
 # Vamos fazer um regplot para ver como ficaram as nossas predições?
 
-# In[20]:
+# In[166]:
 
 
 _ = sns.regplot(x=Y_test, y=Y_pred)
 
 
-# In[21]:
+# In[167]:
 
 
 beta1=lm.coef_
@@ -236,13 +236,13 @@ print(beta1)
 print(intercepto)
 
 
-# In[22]:
+# In[168]:
 
 
 X_test.iloc[0]
 
 
-# In[23]:
+# In[169]:
 
 
 Y_pred[0]
@@ -250,10 +250,10 @@ Y_pred[0]
 
 # Using the linear regression equation we can get the same results as the predicition function.
 
-# In[24]:
+# In[207]:
 
 
-intercepto + (beta1[0] * X_test.iloc[0])
+intercepto + (beta1[0] * X_test.iloc[0][0])
 
 
 # Qual a vantagem de conhecer a fórmula? 
@@ -264,14 +264,14 @@ intercepto + (beta1[0] * X_test.iloc[0])
 
 # Falta adicionar o r_squared
 
-# In[29]:
+# In[171]:
 
 
 mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
 print(mse)
 
 
-# In[30]:
+# In[172]:
 
 
 sklearn.metrics.r2_score(Y_test, Y_pred)  
@@ -288,7 +288,7 @@ sklearn.metrics.r2_score(Y_test, Y_pred)
 
 # Distribuição da variável
 
-# In[31]:
+# In[173]:
 
 
 sns.distplot(boston_data.LSTAT)
@@ -296,7 +296,7 @@ sns.distplot(boston_data.LSTAT)
 
 # Gráfico de Correlação da variável com a resposta
 
-# In[32]:
+# In[174]:
 
 
 _ = sns.regplot(x="LSTAT", y="target", data=boston_data)
@@ -306,7 +306,7 @@ _ = sns.regplot(x="LSTAT", y="target", data=boston_data)
 
 # Correlação de pearson com a variável resposta
 
-# In[33]:
+# In[175]:
 
 
 boston_data.target.corr(boston_data.LSTAT)
@@ -314,7 +314,7 @@ boston_data.target.corr(boston_data.LSTAT)
 
 # Definir novos X e Y
 
-# In[34]:
+# In[176]:
 
 
 Y = boston_data['target']
@@ -323,7 +323,7 @@ X = boston_data.LSTAT.to_frame()
 
 # Dividir o dataset em treino e teste
 
-# In[35]:
+# In[177]:
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
@@ -331,7 +331,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, rand
 
 # Treinar o novo modelo
 
-# In[36]:
+# In[178]:
 
 
 lm.fit(X_train, Y_train)
@@ -341,7 +341,7 @@ Y_pred = lm.predict(X_test)
 
 # Verificar as predições com um `regplot`
 
-# In[37]:
+# In[179]:
 
 
 _ = sns.regplot(x=Y_test, y=Y_pred)
@@ -349,7 +349,7 @@ _ = sns.regplot(x=Y_test, y=Y_pred)
 
 # Vamos usar o r quadrático médio para avaliar qual dos modelos tem o menor erro quadrático
 
-# In[38]:
+# In[180]:
 
 
 mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
@@ -358,7 +358,7 @@ print(mse)
 
 # Podemos usar também o r quadrado para validar o erro
 
-# In[39]:
+# In[181]:
 
 
 sklearn.metrics.r2_score(Y_test, Y_pred)  
@@ -372,25 +372,25 @@ sklearn.metrics.r2_score(Y_test, Y_pred)
 
 # Existe uma maneira de fazer a correlação com todas as variáveis possíveis?
 
-# In[43]:
+# In[182]:
 
 
 important_vars = boston_data[['RM', 'PTRATIO', 'LSTAT']]
 
 
-# In[46]:
+# In[183]:
 
 
 # https://seaborn.pydata.org/examples/many_pairwise_correlations.html
 
 
-# In[44]:
+# In[184]:
 
 
 corr = important_vars.corr()
 
 
-# In[45]:
+# In[185]:
 
 
 corr
@@ -398,7 +398,7 @@ corr
 
 # ### Matriz de correlação
 
-# In[52]:
+# In[186]:
 
 
 # Generate a mask for the upper triangle
@@ -420,31 +420,110 @@ sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
 
 # ### Verificar a distribuição da variável que resta - PTRATIO
 
+# ![cat_nail_care](https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif)
+
+# In[187]:
+
+
+sns.distplot(boston_data.PTRATIO)
+
+
 # ### Realizar a regressão Linear para as 3 variáveis mais importantes
+
+# In[189]:
+
+
+Y = boston_data['target']
+X = important_vars
+
+
+# In[190]:
+
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
+
+
+# In[191]:
+
+
+lm.fit(X_train, Y_train)
+
+Y_pred = lm.predict(X_test)
+
+
+# Esse modelo é melhor ou pior que os anteriores? Qual o melhor modelo?
+
+# In[192]:
+
+
+mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
+print(mse)
+
+
+# In[193]:
+
+
+sklearn.metrics.r2_score(Y_test, Y_pred)  
+
 
 # ### Como fica a equação com várias variáveis?
 
-# ### Qual é o melhor modelo?
+# In[194]:
+
+
+beta1=lm.coef_
+intercepto=lm.intercept_
+print(beta1)
+print(intercepto)
+
+
+# In[208]:
+
+
+intercepto + (beta1[0] * X_test.iloc[0][0] + beta1[1] * X_test.iloc[0][1] + beta1[2] * X_test.iloc[0][2])
+
+
+# In[209]:
+
+
+Y_pred[0]
+
 
 # ### E se eu colocasse todas as variáveis?
 
-# Objetivo da aula: Realizar uma análise de um problema de negócio com a regressão linear, partindo da determinação do problema até a aplicação do modelo de regressão linear para validar hipóteses e apresentar uma solução.
-# 
-# 
-# Outcomes esperados:
-# 
-# Saber o objetivos, vantagens e desvantagens do uso de regressão linear como modelo
-# 
-# Conhecer diferentes funcionamentos da regressão linear 
-# 
-# Saber mensurar e comparar modelos
-# 
-# 
-# Breve descrição: o que é regressão linear, qual o objetivo, é um modelo paramétrico (strong assumptions, strong conclusions), comentar sobre as vantagens e desvantagens (principalmente na ótica de negócios — é simples e interpretável). Ter exemplos sobre variáveis X e Y. Como funciona, qual a métrica de erro (standard error, residual sum of squares, R2), como os coeficientes são estimados, como o modelo funciona em forma de matriz, como funciona no caso de múltiplas variáveis, como mensurar e como comparar modelos. Ao final da aula, os alunos devem ser capazes de identificar aplicações de regressão linear em cenários de negócios.
-# 
-# 
-# O que eles vão ter antes da aula é o capítulo de Regressão do DataCamp. Você pode, se quiser, complementar com algum texto ou material que explique melhor os conceitos, passando uma atividade pré-aula para os alunos. 
-# Essa é exatamente a ideia por trás da nossa metodologia: todo conceito pode ser estudado antes, e durante a aula nós focamos em botar em prática o tema. Você pode, também, abordar conceitos e fazer explicações durante a prática - a teoria não precisa ser passada antes da prática, e nós sugerimos utilizar a prática como exemplo para ensinar a teoria. O importante é que os alunos saiam da aula tendo visto uma apliação completa de regressão linear e que consigam replicar sozinhos depois.
+# In[212]:
+
+
+Y = boston_data['target']
+X = boston_data.drop('target', axis=1)
+
+
+# In[215]:
+
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
+
+
+# In[216]:
+
+
+lm.fit(X_train, Y_train)
+
+Y_pred = lm.predict(X_test)
+
+
+# In[217]:
+
+
+mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
+print(mse)
+
+
+# In[218]:
+
+
+sklearn.metrics.r2_score(Y_test, Y_pred)  
+
 
 # ## Outros desafios usando Regressão
 
