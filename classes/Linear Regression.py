@@ -18,7 +18,7 @@
 # 
 # ![Question](https://media.giphy.com/media/3o7buirYcmV5nSwIRW/giphy.gif)
 
-# In[147]:
+# In[1]:
 
 
 import pandas as pd
@@ -34,14 +34,14 @@ get_ipython().magic('matplotlib inline')
 
 # Primeiro carregue o dataset. Vamos dar uma roubada e usar o dataset da biblioteca do sklearn.
 
-# In[148]:
+# In[2]:
 
 
 from sklearn.datasets import load_boston
 boston = load_boston()
 
 
-# In[149]:
+# In[3]:
 
 
 print(boston)
@@ -51,7 +51,7 @@ print(boston)
 
 # Como vejo as chaves de um dicionário?
 
-# In[150]:
+# In[4]:
 
 
 print(boston.keys())
@@ -59,7 +59,7 @@ print(boston.keys())
 
 # Vamos verificar a chave que descreve como o dataset está estruturado. É a chave `DESCR`.
 
-# In[151]:
+# In[5]:
 
 
 print(boston.DESCR)
@@ -69,7 +69,7 @@ print(boston.DESCR)
 
 # Jeito 1 - Assim, não dá para ver os nomes dos atributos:
 
-# In[152]:
+# In[6]:
 
 
 boston_data = pd.DataFrame(boston.data)
@@ -78,13 +78,13 @@ boston_data.head()
 
 # Jeito 2 - Com os nomes dos atributos
 
-# In[153]:
+# In[7]:
 
 
 boston_data = pd.DataFrame(boston.data, columns=boston.feature_names)
 
 
-# In[154]:
+# In[8]:
 
 
 boston_data.head()
@@ -94,13 +94,13 @@ boston_data.head()
 
 # Primeiro precisamos colocar a variável resposta no dataset
 
-# In[155]:
+# In[9]:
 
 
 boston_data['target'] = boston.target
 
 
-# In[156]:
+# In[10]:
 
 
 boston_data.head()
@@ -108,7 +108,7 @@ boston_data.head()
 
 # Vamos ver se fizemos tudo certinho verificando o tamanho do Dataframe.
 
-# In[157]:
+# In[11]:
 
 
 boston_data.shape
@@ -125,10 +125,16 @@ boston_data.shape
 
 # ### Vamos dar uma olhada na variável resposta
 
-# In[158]:
+# In[12]:
 
 
 sns.distplot(boston_data.target)
+
+
+# In[13]:
+
+
+sns.boxplot(boston_data.target)
 
 
 # ## Simple linear regression
@@ -137,7 +143,7 @@ sns.distplot(boston_data.target)
 
 # Inicialmente vamos ver a distribuição de cada variável com o `describe`
 
-# In[159]:
+# In[14]:
 
 
 boston_data.describe().T
@@ -169,15 +175,21 @@ boston_data.describe().T
 
 # Distribuição da variável
 
-# In[160]:
+# In[15]:
 
 
 sns.distplot(boston_data.RM)
 
 
+# In[16]:
+
+
+sns.boxplot(boston_data.RM)
+
+
 # Vamos testar a correlação dessa variável com o valor dos imóveis.
 
-# In[161]:
+# In[17]:
 
 
 _ = sns.regplot(x="RM", y="target", data=boston_data)
@@ -185,7 +197,7 @@ _ = sns.regplot(x="RM", y="target", data=boston_data)
 
 # Vamos ver a correlção de Pearson usando o método `corr` do pandas
 
-# In[162]:
+# In[18]:
 
 
 boston_data.target.corr(boston_data.RM)
@@ -195,20 +207,20 @@ boston_data.target.corr(boston_data.RM)
 
 # Precisamos separar o dataset em treino e teste e também pegar a variável resposta
 
-# In[163]:
+# In[19]:
 
 
 Y = boston_data['target']
 X = boston_data.RM.to_frame()
 
 
-# In[164]:
+# In[20]:
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
 
 
-# In[165]:
+# In[21]:
 
 
 from sklearn.linear_model import LinearRegression
@@ -221,13 +233,13 @@ Y_pred = lm.predict(X_test)
 
 # Vamos fazer um regplot para ver como ficaram as nossas predições?
 
-# In[166]:
+# In[22]:
 
 
 _ = sns.regplot(x=Y_test, y=Y_pred)
 
 
-# In[167]:
+# In[23]:
 
 
 beta1=lm.coef_
@@ -236,13 +248,15 @@ print(beta1)
 print(intercepto)
 
 
-# In[168]:
+# Cada vez que aumenta em 1 quarto médio, o valor do imóvel muda (no caso aumenta) em 9.11 dólares.
+
+# In[24]:
 
 
 X_test.iloc[0]
 
 
-# In[169]:
+# In[25]:
 
 
 Y_pred[0]
@@ -250,7 +264,7 @@ Y_pred[0]
 
 # Using the linear regression equation we can get the same results as the predicition function.
 
-# In[207]:
+# In[26]:
 
 
 intercepto + (beta1[0] * X_test.iloc[0][0])
@@ -264,14 +278,14 @@ intercepto + (beta1[0] * X_test.iloc[0][0])
 
 # Falta adicionar o r_squared
 
-# In[171]:
+# In[27]:
 
 
 mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
 print(mse)
 
 
-# In[172]:
+# In[28]:
 
 
 sklearn.metrics.r2_score(Y_test, Y_pred)  
@@ -288,7 +302,7 @@ sklearn.metrics.r2_score(Y_test, Y_pred)
 
 # Distribuição da variável
 
-# In[173]:
+# In[29]:
 
 
 sns.distplot(boston_data.LSTAT)
@@ -296,7 +310,7 @@ sns.distplot(boston_data.LSTAT)
 
 # Gráfico de Correlação da variável com a resposta
 
-# In[174]:
+# In[30]:
 
 
 _ = sns.regplot(x="LSTAT", y="target", data=boston_data)
@@ -306,7 +320,7 @@ _ = sns.regplot(x="LSTAT", y="target", data=boston_data)
 
 # Correlação de pearson com a variável resposta
 
-# In[175]:
+# In[31]:
 
 
 boston_data.target.corr(boston_data.LSTAT)
@@ -314,7 +328,7 @@ boston_data.target.corr(boston_data.LSTAT)
 
 # Definir novos X e Y
 
-# In[176]:
+# In[32]:
 
 
 Y = boston_data['target']
@@ -323,7 +337,7 @@ X = boston_data.LSTAT.to_frame()
 
 # Dividir o dataset em treino e teste
 
-# In[177]:
+# In[33]:
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
@@ -331,7 +345,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, rand
 
 # Treinar o novo modelo
 
-# In[178]:
+# In[34]:
 
 
 lm.fit(X_train, Y_train)
@@ -341,7 +355,7 @@ Y_pred = lm.predict(X_test)
 
 # Verificar as predições com um `regplot`
 
-# In[179]:
+# In[35]:
 
 
 _ = sns.regplot(x=Y_test, y=Y_pred)
@@ -349,7 +363,7 @@ _ = sns.regplot(x=Y_test, y=Y_pred)
 
 # Vamos usar o r quadrático médio para avaliar qual dos modelos tem o menor erro quadrático
 
-# In[180]:
+# In[36]:
 
 
 mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
@@ -358,7 +372,7 @@ print(mse)
 
 # Podemos usar também o r quadrado para validar o erro
 
-# In[181]:
+# In[37]:
 
 
 sklearn.metrics.r2_score(Y_test, Y_pred)  
@@ -372,25 +386,25 @@ sklearn.metrics.r2_score(Y_test, Y_pred)
 
 # Existe uma maneira de fazer a correlação com todas as variáveis possíveis?
 
-# In[182]:
+# In[38]:
 
 
 important_vars = boston_data[['RM', 'PTRATIO', 'LSTAT']]
 
 
-# In[183]:
+# In[39]:
 
 
 # https://seaborn.pydata.org/examples/many_pairwise_correlations.html
 
 
-# In[184]:
+# In[40]:
 
 
 corr = important_vars.corr()
 
 
-# In[185]:
+# In[41]:
 
 
 corr
@@ -398,7 +412,7 @@ corr
 
 # ### Matriz de correlação
 
-# In[186]:
+# In[42]:
 
 
 # Generate a mask for the upper triangle
@@ -422,28 +436,34 @@ sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
 
 # ![cat_nail_care](https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif)
 
-# In[187]:
+# In[43]:
 
 
 sns.distplot(boston_data.PTRATIO)
 
 
+# In[44]:
+
+
+sns.boxplot(boston_data.PTRATIO)
+
+
 # ### Realizar a regressão Linear para as 3 variáveis mais importantes
 
-# In[189]:
+# In[45]:
 
 
 Y = boston_data['target']
 X = important_vars
 
 
-# In[190]:
+# In[46]:
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
 
 
-# In[191]:
+# In[47]:
 
 
 lm.fit(X_train, Y_train)
@@ -453,22 +473,30 @@ Y_pred = lm.predict(X_test)
 
 # Esse modelo é melhor ou pior que os anteriores? Qual o melhor modelo?
 
-# In[192]:
+# In[48]:
 
 
 mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
 print(mse)
 
 
-# In[193]:
+# In[49]:
 
 
 sklearn.metrics.r2_score(Y_test, Y_pred)  
 
 
+# Vamos ver o gráfico delas
+
+# In[50]:
+
+
+_ = sns.regplot(x=Y_test, y=Y_pred)
+
+
 # ### Como fica a equação com várias variáveis?
 
-# In[194]:
+# In[51]:
 
 
 beta1=lm.coef_
@@ -477,34 +505,93 @@ print(beta1)
 print(intercepto)
 
 
-# In[208]:
+# In[52]:
 
 
 intercepto + (beta1[0] * X_test.iloc[0][0] + beta1[1] * X_test.iloc[0][1] + beta1[2] * X_test.iloc[0][2])
 
 
-# In[209]:
+# In[53]:
 
 
 Y_pred[0]
 
 
+# ### E o que nos entendemos desse modelo?
+
+# In[54]:
+
+
+lm.coef_.tolist()
+
+
+# In[55]:
+
+
+weights = pd.DataFrame(list(zip(['RM', 'PTRATIO', 'LSTAT'], lm.coef_.tolist())),columns=['names', 'coefs'])
+
+
+# In[56]:
+
+
+weights
+
+
+# In[57]:
+
+
+sns.barplot(weights.names, weights.coefs)
+
+
 # ### E se eu colocasse todas as variáveis?
 
-# In[212]:
+# ### Primeiro vamos dar uma olhada nas correlações
+
+# In[58]:
+
+
+corr = boston_data.corr()
+
+
+# In[59]:
+
+
+# Generate a mask for the upper triangle
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+# Set up the matplotlib figure
+f, ax = plt.subplots(figsize=(11, 9))
+
+# Generate a custom diverging colormap
+cmap = sns.diverging_palette(220, 10, as_cmap=True)
+
+# Draw the heatmap with the mask and correct aspect ratio
+sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+
+# Com essa matriz nos já podemos ter uma ideia de quais variáveis são mais interessantes do que outras.
+
+# Caso a gente fique com variáveis altamente correlacionadas podemos entrar em um problema de multicolinearidade. Quais variáveis podemos remover?
+# 
+
+# Depois nos dados que nós ainda não olhamos
+
+# In[60]:
 
 
 Y = boston_data['target']
 X = boston_data.drop('target', axis=1)
 
 
-# In[215]:
+# In[61]:
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
 
 
-# In[216]:
+# In[62]:
 
 
 lm.fit(X_train, Y_train)
@@ -512,14 +599,62 @@ lm.fit(X_train, Y_train)
 Y_pred = lm.predict(X_test)
 
 
-# In[217]:
+# In[63]:
+
+
+_ = sns.regplot(x=Y_test, y=Y_pred)
+
+
+# In[64]:
 
 
 mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
 print(mse)
 
 
-# In[218]:
+# In[65]:
+
+
+sklearn.metrics.r2_score(Y_test, Y_pred)  
+
+
+# ### Vamos remover variáveis correlacionadas
+
+# In[107]:
+
+
+Y = boston_data['target']
+X = boston_data.drop(['target', 'AGE', 'INDUS', 'NOX'], axis=1)
+
+
+# In[108]:
+
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 42)
+
+
+# In[109]:
+
+
+lm.fit(X_train, Y_train)
+
+Y_pred = lm.predict(X_test)
+
+
+# In[110]:
+
+
+_ = sns.regplot(x=Y_test, y=Y_pred)
+
+
+# In[111]:
+
+
+mse = sklearn.metrics.mean_squared_error(Y_test, Y_pred)
+print(mse)
+
+
+# In[112]:
 
 
 sklearn.metrics.r2_score(Y_test, Y_pred)  
