@@ -26,14 +26,12 @@ dict = {"country": ["Brazil", "Russia", "India", "China", "South Africa"],
 
 
 # Transformar o dicionário em um dataframe
-brics = pd.DataFrame(dict)
 
 
-# In[4]:
+# In[69]:
 
 
 # Ver os primeiros registros desse dataframe
-brics.head()
 
 
 # ## Importar um csv com o pandas
@@ -46,25 +44,22 @@ brics.head()
 #  - **conversionRates.csv**: Currency conversion rates (to USD) as accessed from the R package "quantmod" on September 14, 2017
 #  - **RespondentTypeREADME.txt**: This is a schema for decoding the responses in the "Asked" column of the schema.csv file.
 
-# In[5]:
+# In[70]:
 
 
 # Carregue o dataset multipleChoiceResponses com o pandas 
-multiple_choice = pd.read_csv('kaggle-survey-2017/multipleChoiceResponses.csv')
 
 
-# In[6]:
+# In[71]:
 
 
 # Veja as primeiras linhas do dataset
-multiple_choice.head()
 
 
-# In[7]:
+# In[72]:
 
 
 #Veja a quantidade de linhas e de colunas do dataset
-multiple_choice.shape
 
 
 # Existem 228 colunas!!!
@@ -79,51 +74,50 @@ pd.set_option('max_rows', 200)
 pd.set_option('max_columns', 1000)
 
 
-# In[9]:
+# In[73]:
 
 
-multiple_choice.head()
+# Vamos ver um pedaço do dataset
 
 
 # Podemos ver só o nome das colunas também utilizando o `columns`. Para ficar mais fácil de visualizar, ao invés de retornar o array, podemos transformar esse dado em uma Series.
 
-# In[10]:
+# In[74]:
 
 
 # Use o columns no dataframe e coloque-o em uma Series para facilitar a visualização
-pd.Series(multiple_choice.columns)
 
 
 # Podemos ver mais detalhes do dataset com o `info()`
 
-# In[11]:
+# In[75]:
 
 
-multiple_choice.info()
+# use o info no dataframe
 
 
 # Podemos dar uma olhada nos tipos de campos que vem em cada uma das colunas númericas com um único comando
 
-# In[12]:
+# In[76]:
 
 
-multiple_choice.describe()
+# veja as estatisticas dos campos númericos
 
 
 # E se eu quiser ver a quantidade de nulos no dataset todo?
 
-# In[13]:
+# In[77]:
 
 
-multiple_choice.isnull().sum()
+# Veja nulos do dataset
 
 
 # E se eu quiser fazer a porcentagem de nulos?
 
-# In[14]:
+# In[78]:
 
 
-multiple_choice.isnull().sum() / len(multiple_choice)
+# veja a porcentagem de nulos
 
 
 # Nossa quanto nulo!
@@ -131,83 +125,78 @@ multiple_choice.isnull().sum() / len(multiple_choice)
 
 # O que eu devo fazer se eu quiser ver apenas coluna `JobFactorSalary`?
 
-# In[15]:
+# In[79]:
 
 
-multiple_choice['JobFactorSalary']
+# veja uma única coluna
 
 
 # Vamos fazer algumas operações com o pandas para contar o número de nulos que existem nessa coluna
 
-# In[16]:
+# In[80]:
 
 
-multiple_choice['JobFactorSalary'].isnull().sum()
+# Veja o número de nulos apenas desta coluna
 
 
 # Como eu faço se eu só quiser ver os 10 primeiros registros?
 
-# In[17]:
+# In[81]:
 
 
-multiple_choice['JobFactorSalary'][:10]
+# Selecione apenas os 10 primeiros registros
 
 
 # E se eu quiser ver 2 colunas ao mesmo tempo? (E apenas essas 2 colunas)
 
-# In[18]:
+# In[82]:
 
 
-multiple_choice[['JobFactorSalary', 'JobFactorLearning']][:10]
+# Veja as colunas 'JobFactorSalary' e 'JobFactorLearning'
 
 
 # O quanto que as pessoas dessa pesquisa estão satisfeitas com o trabalhos? Conseguimos saber isso usando só o pandas?
 
-# In[19]:
+# In[83]:
 
 
-multiple_choice['JobSatisfaction'].value_counts()
+# Use uma função para contar o número de cada uma das variáveis da coluna JobSatisfaction
 
 
 # Percebemos com esse comando que as pessoas até que estão bastante satisfeitas.
 
 # Agora vamos olhar só as pessoas que estão Super Satisfeitas (Highly Satisfied) com o seu trabalho. Como que eu posso fazer isso?
 
-# In[20]:
+# In[84]:
 
 
 # Filtre só quem está com o JobSatisfaction de 10. Guarde isso em uma variável pq é bastante dado
-highly_satisfied = multiple_choice[multiple_choice['JobSatisfaction'] == '10 - Highly Satisfied']
 
 
-# In[21]:
+# In[85]:
 
 
-# veja o tamanho do dataset. Ele bateu com a quantidade de pessoas que estão altamente satisfeitas?
-highly_satisfied.shape
+# Veja o tamanho do dataset. Ele bateu com a quantidade de pessoas que estão altamente satisfeitas?
 
 
-# In[22]:
+# In[86]:
 
 
 # Veja os primeiros 3 registros (todas as colunas) das pessoas altamentes satisfeitas
-highly_satisfied[:3]
 
 
 # E se eu quiser ver as pessoas altamente satisfeitas e que trabalham com python?
 
-# In[23]:
+# In[87]:
 
 
-highly_satisfied = multiple_choice['JobSatisfaction'] == '10 - Highly Satisfied'
-pythonist = multiple_choice['LanguageRecommendationSelect'] == 'Python'
-highly_satisfied_and_pythonist = multiple_choice[highly_satisfied & pythonist]
+# Preciso usar 2 filtros. JobSatisfaction e LanguageRecommendationSelect
 
 
-# In[24]:
+# In[88]:
 
 
-highly_satisfied_and_pythonist.shape
+# Só para validar que deu certo é bom ver o shape do resultado
 
 
 # E se tentassemos com a idade? Ver só que está abaixo de 30 anos
@@ -215,51 +204,24 @@ highly_satisfied_and_pythonist.shape
 # In[25]:
 
 
-highly_satisfied = multiple_choice['JobSatisfaction'] == '10 - Highly Satisfied'
-age = multiple_choice['Age'] < 30.0
-highly_satisfied_and_age = multiple_choice[highly_satisfied & age]
+# Aqui precisa usar JobSatisfaction e Age
 
 
-# In[26]:
+# In[89]:
 
 
-highly_satisfied_and_age.shape
+# Só para validar que deu certo é bom ver o shape do resultado
 
 
-# Quais são as linguagens que a galera altamente satisfeita recomenda?
+# Quais são as linguagens que a galera altamente satisfeita recomenda? Como vc faria para mostrar esses valores em porcentagem?
 
-# In[27]:
-
-
-multiple_choice[highly_satisfied]['LanguageRecommendationSelect'].value_counts()
+# In[92]:
 
 
-# In[28]:
-
-
-highly_satisfied_languages = multiple_choice[highly_satisfied]['LanguageRecommendationSelect'].value_counts()
-language_counts = multiple_choice['JobSatisfaction'][highly_satisfied].notnull().sum()
-
-
-# In[29]:
-
-
-language_counts
-
-
-# In[30]:
-
-
-(highly_satisfied_languages / language_counts) * 100
+# preciso usar a variável que eu criei umas células acima e LanguageRecommendationSelect e também do número de pessoas que responderam a pergunta JobSatisfaction
 
 
 # E se eu quiser ordenar esses valores? Do menor para o maior?
-
-# In[31]:
-
-
-pd.Series((highly_satisfied_languages / language_counts) * 100).sort_values()
-
 
 # ### Desafio 1
 
@@ -269,34 +231,22 @@ pd.Series((highly_satisfied_languages / language_counts) * 100).sort_values()
 
 # ![arrested_panda](https://media.giphy.com/media/N6funLtVsHW0g/giphy.gif)
 
-# In[32]:
-
-
-multiple_choice.isnull().sum().sort_values(ascending=False)
-
-
-# In[33]:
-
-
-multiple_choice[multiple_choice['WorkToolsFrequencyAngoss'].notnull()]['Country'].value_counts()
-
-
 # ## Selecionando por index
 
 # E se eu quiser pegar os valores de uma linha específica do dataframe?
 
-# In[34]:
+# In[94]:
 
 
-multiple_choice.iloc[10,]
+# Qual comando eu usuária para pegar o registro da linha 11?
 
 
 # Também posso ver só o valor de uma coluna, sem escrever o nome, somente pela sua posição
 
-# In[35]:
+# In[95]:
 
 
-multiple_choice.iloc[:,0]
+# E para pegar a primeira coluna do dataset?
 
 
 # Mais detalhes sobre `loc`, `iloc` e `ix` podem ser vistas nesse [link](https://www.shanelynn.ie/select-pandas-dataframe-rows-and-columns-using-iloc-loc-and-ix/)
@@ -309,69 +259,18 @@ multiple_choice.iloc[:,0]
 
 # ![challenge_panda](https://media.giphy.com/media/K9z3im98oo9Ve/giphy.gif)
 
-# In[36]:
-
-
-free_responses = pd.read_csv('kaggle-survey-2017/freeformResponses.csv')
-
-
-# In[37]:
-
-
-free_responses.head()
-
-
-# In[38]:
-
-
-free_responses.shape
-
-
-# In[39]:
-
-
-free_responses.isnull().sum().sort_values()
-
-
-# In[40]:
-
-
-free_index = free_responses['DataScienceIdentityFreeForm'].notnull()
-
-
-# In[41]:
-
-
-identity_check = pd.DataFrame({'IdentityFree': free_responses[free_index]['DataScienceIdentityFreeForm'], 
-              'IdentitySelect': multiple_choice[free_index]['DataScienceIdentitySelect']})
-
-
-# In[42]:
-
-
-identity_check.shape
-
-
-# In[43]:
-
-
-identity_check.isnull().sum()
-
-
-# Aparentemente não foi isso que aconteceu...
-
 # ## Alterando o dataset original
 
-# In[44]:
+# In[96]:
 
 
-df = multiple_choice.copy()
+# Primeiro vamos copiar o dataset original para outra variável, para não dar pau no resto da aula :P
 
 
-# In[45]:
+# In[97]:
 
 
-df['LearningDataScience'].value_counts()
+# Agora vamos ver os valores da coluna LearningDataScience
 
 
 # In[46]:
@@ -386,24 +285,25 @@ def replace_value(row):
         return "no"
 
 
-# In[47]:
+# In[98]:
 
 
-df['LearningDataScienceSimple'] = df['LearningDataScience'].apply(replace_value)
+# Agora vamos aplicar a função replace_value a todas as linhas do LearningDataScience. 
+# Crie uma nova coluna chamada LearningDataScienceSimple
 
 
 # Agora podemos ver os novos valores desses campos
 
-# In[48]:
+# In[99]:
 
 
-df['LearningDataScienceSimple'].value_counts()
+# Agora vamos ver os valores da coluna LearningDataScienceSimple
 
 
 # In[49]:
 
 
-df.shape
+# Qual o shape do dataset atual?
 
 
 # E agora que a outra coluna muito complexa não serve mais, podemos descartá-la
@@ -411,46 +311,40 @@ df.shape
 # In[50]:
 
 
-df.drop(['LearningDataScience'], axis=1, inplace=True)
+# Descarte a coluna LearningDataScience
 
 
-# In[51]:
+# In[100]:
 
 
-df.shape
+# Qual o shape do dataset atual?
 
 
 # Pela quantidade de linhas no dataset percebemos que o `value_counts()` não retorna os valores nulos - e nós temos MUITOS valores nulos nessa coluna. Podemos utilizar um método do pandas para trocar os NAs por uma categoria nossa.
 
-# In[52]:
+# In[101]:
 
 
-df['LearningDataScienceSimple'].fillna("did not answer the question", inplace=True)
+# Substitua os nulos pela frase "did not answer the question"
 
 
-# In[53]:
+# In[102]:
 
 
-df['LearningDataScienceSimple'].value_counts()
+# Agora vamos ver os valores da coluna LearningDataScienceSimple
 
 
-# Outra forma de alterar o dataset é utilizando funções _in place_ para isso utilizaremos o `lambda`
+# Outra forma de alterar o dataset é utilizando funções _in place_. Para isso utilizaremos o `lambda`
 
 # Por exemplo: E se eu quiser atualizar a idade dos participantes? O dataset foi coletado em 2017 e já estamos em 2018
 
-# In[54]:
+# In[103]:
 
 
-df['NewAge'] = df['Age'].apply(lambda x: x + 1)
+# Ao invés de usar uma função que soma +1, vamos escrever a nossa com o lambda
 
 
 # Vamos ver se funcionou? Vamos dar uma olhada nos primeiros 5 registros, com a coluna 'Age' e a 'NewAge' lado a lado
-
-# In[55]:
-
-
-df[['Age','NewAge']][:5]
-
 
 # Ficou mais claro a proporção de pessoas que não responderam agora o/
 
@@ -458,77 +352,6 @@ df[['Age','NewAge']][:5]
 
 # Separar os datasets pelas pessoas que os responderam. Para isso você vai ter que carregar o dataset `schema.csv`.
 # 
-# Como uns datasets ficariam muito pequenos, sugiro que você utilize os seus conhecimentos recém adquiridos e crie 4 datasets distintos.
+# Como uns datasets ficariam muito pequenos, sugiro que você utilize os seus conhecimentos recém adquiridos e crie 4 datasets distintos. Além de criá-los você deve salvá-los como `.csv`. Vamos usar esses datasets na próxima aula.
 
 # ![panda_playground](https://media.giphy.com/media/ieaUdBJJC19uw/giphy.gif)
-
-# In[56]:
-
-
-schema = pd.read_csv('kaggle-survey-2017/schema.csv')
-
-
-# In[57]:
-
-
-schema.head()
-
-
-# In[58]:
-
-
-schema.Asked.value_counts()
-
-
-# In[59]:
-
-
-coding_worker_column = schema[schema['Asked'] == 'CodingWorker']['Column']
-all_column = schema[schema['Asked'] == 'All']['Column']
-learners_column = schema[schema['Asked'] == 'Learners']['Column']
-others_columns = schema[(~ schema['Asked'].isin(['CodingWorker', 'All', 'Learners']))]['Column']
-
-
-# In[60]:
-
-
-all_multiple_selection_cols = [c for c in all_column.values if 'freeform' not in c.lower()]
-coding_worker_multiple_selection_cols = [c for c in coding_worker_column.values if 'freeform' not in c.lower()]
-learners_multiple_selection_cols = [c for c in learners_column.values if 'freeform' not in c.lower()]
-others_multiple_selection_cols = [c for c in others_columns.values if 'freeform' not in c.lower()]
-
-
-# In[61]:
-
-
-others_multiple_selection_cols
-
-
-# In[63]:
-
-
-all_multiple_selection = multiple_choice[all_multiple_selection_cols]
-coding_worker_multiple_selection = multiple_choice[coding_worker_multiple_selection_cols]
-learners_multiple_selection = multiple_choice[learners_multiple_selection_cols]
-others_multiple_selection = multiple_choice[others_multiple_selection_cols]
-
-
-# In[64]:
-
-
-print(all_multiple_selection.shape)
-print(coding_worker_multiple_selection.shape)
-print(learners_multiple_selection.shape)
-print(others_multiple_selection.shape)
-
-
-# Lembrando que nós jogamos fora quem era 'free_form' - Logo, haverão sempre menos colunas do que vimos antes na quantidade por tipo de pessoa que respondeu.
-
-# In[68]:
-
-
-all_multiple_selection.to_csv('all_multiple_selection.csv')
-coding_worker_multiple_selection.to_csv('coding_worker_multiple_selection.csv')
-learners_multiple_selection.to_csv('learners_multiple_selection.csv')
-others_multiple_selection.to_csv('others_multiple_selection.csv')
-
