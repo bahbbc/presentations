@@ -5,7 +5,7 @@
 
 # ![](https://media.giphy.com/media/zw69pUViBZCZW/giphy.gif)
 
-# In[91]:
+# In[1]:
 
 
 import seaborn as sns
@@ -21,77 +21,50 @@ get_ipython().magic('matplotlib inline')
 df = pd.read_csv('kaggle-survey-2017/multipleChoiceResponses.csv', encoding="ISO-8859-1")
 
 
-# In[3]:
-
-
-exchange = pd.read_csv('kaggle-survey-2017/conversionRates.csv', encoding="ISO-8859-1", low_memory=False)
-
-
-# In[4]:
-
-
-df = pd.merge(left=df, right=exchange, how='left', 
-              left_on='CompensationCurrency', right_on='originCountry')
-
-
-# In[6]:
-
-
-df.columns
-
-
-# In[7]:
-
-
-df.shape
-
-
 # ## Histogramas
 
 # Vamos analisar a idade dos cientistas de dados dessa pesquisa. Qual a idade média? Quantos anos tem a pessoa mais velha dessa pesquisa? 
 
 # Para conseguir usar o `countplot` vamos transformar `Age` para inteiro para poder enxergar os numeros melhor
 
-# In[8]:
+# In[2]:
 
 
-df['Age'] = df['Age'].fillna(0).astype(int)
+# vamos preencher os nulos da variável "Age" com zeros
 
 
 # Vamos ver um histograma da idade dos participantes
 
-# In[9]:
+# In[1]:
 
 
-_ = sns.countplot(x = 'Age', data=df)
+# Agora fazer um countplot com essa variável
 
 
 # Ficou horrível...
 # 
 # Vamos adicionar o titulo e aumentar o gráfico
 
-# In[10]:
+# In[3]:
 
 
-plt.subplots(figsize=(20,15))
-plot = sns.countplot(y="Age", data=df).set_title("Count of respondents by age")
+# Um countplot maior e na horizontal
 
 
 # E se eu não quiser um eixo x mais limpo? Só para ver a distribuição em si?
 
-# In[11]:
+# In[4]:
 
 
-plt.subplots(figsize=(10,8))
-_ = sns.distplot(df['Age']).set_title("Count of respondents by age")
+# agora um distplot
 
 
 # E para remover a curva de tendencia?
 
-# In[52]:
+# In[5]:
 
 
-_ = sns.distplot(df['Age'], kde=False).set_title("Count of respondents by age")
+# remover o kde
 
 
 # **Nota**: Distplot não aceita Nulos. O grande número de pessoas que ficaram com idade zero na verdade são pessoas que não preencheram. 
@@ -102,30 +75,34 @@ _ = sns.distplot(df['Age'], kde=False).set_title("Count of respondents by age")
 # 
 # ![monstros_sa](https://media.giphy.com/media/zxxXYJqTlpBnO/giphy.gif)
 
+# In[ ]:
+
+
+# faça o desafio aqui
+
+
 # ### Como seria o mesmo histograma usando apenas matplotlib?
 
-# In[12]:
+# In[6]:
 
 
-plt.subplots(figsize=(10,8))
-_ = plt.hist(df['Age'], normed=True, alpha=0.5)
-_ = plt.title("Count of respondents by age")
+# com matplotlib
 
 
 # ### Quais são as áreas de graduação dos cientistas de dados?
 
-# In[84]:
+# In[7]:
 
 
-sns.countplot(y="MajorSelect", data=df, palette="Greens_d").set_title("Count of respondents by major")
+#Countplot com MajorSelect
 
 
 # Para ficar mais facil de ver podemos ordenar as barras
 
-# In[88]:
+# In[8]:
 
 
-_ = sns.countplot(y="MajorSelect", data=df, palette="Greens_d", order=df['MajorSelect'].value_counts().index) .set_title("Count of respondents by major")
+# ordene o eixo y
 
 
 # Agora ficou bem mais fácil de tirar conclusões sobre os cursos.
@@ -136,10 +113,10 @@ _ = sns.countplot(y="MajorSelect", data=df, palette="Greens_d", order=df['MajorS
 
 # ### Qual o maior grau de educação dos cientistas de dados?
 
-# In[89]:
+# In[9]:
 
 
-_ = sns.countplot(y="FormalEducation", data=df, palette="Greens_d", order=df['FormalEducation'].value_counts().index) .set_title("Count of respondents by formal education")
+# Use o campo FormalEducation
 
 
 # ### Desafio 2
@@ -151,105 +128,64 @@ _ = sns.countplot(y="FormalEducation", data=df, palette="Greens_d", order=df['Fo
 
 # ![finn_mathematical](https://media.giphy.com/media/ccQ8MSKkjHE2c/giphy.gif)
 
-# In[70]:
+# In[10]:
 
 
-df['PastJobTitlesSelect'].value_counts()
-
-
-# In[103]:
-
-
-df['PastJobTitlesSelect'] = df['PastJobTitlesSelect'].fillna('NULL')
-
-
-# In[105]:
-
-
-past_job_category = []
-for s in df['PastJobTitlesSelect']:
-    past_job_category.append(re.sub(r'(?=,).*', '', s))
-    
-df['new_job_category'] = past_job_category
-
-
-# In[107]:
-
-
-df[['PastJobTitlesSelect', 'new_job_category']].head(5)
-
-
-# In[108]:
-
-
-df['new_job_category'].value_counts()
-
-
-# In[109]:
-
-
-_ = sns.countplot(y="new_job_category", data=df, palette="Greens_d", order=df['new_job_category'].value_counts().index) .set_title("Count of respondents by previous job category")
+# Resolva o desafio aqui
 
 
 # ### Será que o trabalho remoto impacta no tempo que um cientista passa coletando dados?
 
-# In[124]:
+# In[11]:
 
 
-df['RemoteWork'].value_counts()
+# Vamos ver as categorias da variável RemoteWork
 
 
-# In[129]:
+# In[12]:
 
 
-df['TimeGatheringData'].value_counts()
+# Vamos ver as categorias da variável TimeGatheringData
 
 
-# In[128]:
+# In[13]:
 
 
-df['TimeGatheringData'] = df['TimeGatheringData'].fillna(-1)
-
-
-# In[132]:
-
-
-sns.swarmplot(x="RemoteWork", y="TimeGatheringData", data=df)
+# Agora vamos usar o swarplot. Ele pode demorar um pouquinho...
 
 
 # Parece que não muda muito... 
 
 # ### E se eu quiser saber se o tempo que a pessoa passa gerando visualizações impacta no tempo que ela gasta em visualização em um projeto?
 
-# In[134]:
+# In[14]:
 
 
-df['WorkToolsSelect'].value_counts()
+# Vamos ver as categorias da variável WorkToolsSelect
 
 
-# In[161]:
+# In[15]:
 
 
-df['WorkDataVisualizations'] = df['WorkDataVisualizations'].fillna('NULL')
-work_visualization = []
-for s in df['WorkDataVisualizations']:
-    work_visualization.append(re.sub(' of projects', '', s))
-    
-df['work_visualization'] = work_visualization
+# Agora vamos preencher os nulos com o valor 'NULL'
 
 
-# In[162]:
+# In[16]:
 
 
-df['work_visualization'].value_counts()
+# Podemos substituir o pedaço ' of projects' da string original para o nosso gráfico ficar mais limpo
 
 
-# In[165]:
+# In[17]:
 
 
-plt.subplots(figsize=(10,8))
-sns.swarmplot(x="work_visualization", y="TimeVisualizing", data=df, 
-              order=['100%', '51-75%', '26-50%', '10-25%', 'Less than 10%', 'None', 'NULL'])
+# Vamos verificar os novos valores mais limpos agora
+
+
+# In[18]:
+
+
+# Agora podemos fazer um swarplot de work_visualization com TimeVisualizing
 
 
 # ### Desafio 3
@@ -268,46 +204,20 @@ sns.swarmplot(x="work_visualization", y="TimeVisualizing", data=df,
 
 # ![crazy_finn](https://media.giphy.com/media/KI9oNS4JBemyI/giphy.gif)
 
-# In[170]:
+# In[19]:
 
 
-from string import ascii_letters
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-sns.set(style="white")
-
-# Generate a large random dataset
-rs = np.random.RandomState(33)
-d = df[['TimeGatheringData', 'TimeVisualizing', 'TimeModelBuilding', 'TimeFindingInsights', 'TimeProduction']]
-# Compute the correlation matrix
-corr = d.corr()
-
-# Generate a mask for the upper triangle
-mask = np.zeros_like(corr, dtype=np.bool)
-mask[np.triu_indices_from(mask)] = True
-
-# Set up the matplotlib figure
-f, ax = plt.subplots(figsize=(11, 9))
-
-# Generate a custom diverging colormap
-cmap = sns.diverging_palette(220, 10, as_cmap=True)
-
-# Draw the heatmap with the mask and correct aspect ratio
-sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
-            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+# Resolva o desafio aqui
 
 
 # ### E se eu quiser ter uma ideia do tempo que é investido criando-se modelos?
 
 # ## Boxplot
 
-# In[166]:
+# In[20]:
 
 
-_ = sns.boxplot(df['TimeModelBuilding']).set_title("Time spent by building models")
+# Boxplot de TimeModelBuilding
 
 
 # Eu também posso usar boxplots com variáveis categóricas...
@@ -316,98 +226,68 @@ _ = sns.boxplot(df['TimeModelBuilding']).set_title("Time spent by building model
 
 # Primeiramente, vamos usar apenas as pessoas que tenham valores de salário que é representado pela variável `CompensationAmount`
 
-# In[172]:
+# In[21]:
 
 
-money_index = df['CompensationAmount'].notnull()
-compensation_check = df[money_index]
+# Vamos ver as categorias da variável GenderSelect
 
 
-# In[16]:
+# In[22]:
 
 
-df.describe()
+# Agora vamos precisar carregar o exchange rate e dar merge dele com o nosso dataframe original
 
 
-# In[17]:
+# In[23]:
 
 
-compensation_check['GenderSelect'].value_counts()
+# Agora vamos transformar o CompensationAmount para que tudo fique em dólares
 
 
-# In[18]:
+# In[24]:
 
 
-df['exchangeRate'] = df['exchangeRate'].fillna(0)
-df['CompensationAmount'] = df['CompensationAmount'].fillna(0)
-
-
-# In[19]:
-
-
-df['CompensationAmount'] = df.CompensationAmount.apply(lambda x: 0 if (pd.isnull(x) or (x=='-') or (x==0))
-                                                       else float(x.replace(',',''))) 
-df['CompensationAmount'] = df['CompensationAmount']*df['exchangeRate']
-df = df[df['CompensationAmount']>0]
-
-
-# In[20]:
-
-
-df['CompensationAmount'].describe()
+# Podemos usar o `describe` para ver as estatisticas dessa coluna
 
 
 # In[25]:
 
 
-sns.boxplot(x="GenderSelect", y="CompensationAmount",
-            data=df)
-sns.despine(offset=10, trim=True)
+# Agora sim, podemos plotar o nosso boxplot com categorias 
 
 
 # Tem um outlier nesse conj. de dados que está atrapalhando a nossa visualização... Podemos removê-lo usando boolean indexes. Vamos usar pessoas que ganham até 2000000.
 
-# In[38]:
+# In[26]:
 
 
-sns.boxplot(x="GenderSelect", y="CompensationAmount",
-            data=df[df['CompensationAmount'] < 2000000])
-sns.despine(offset=10, trim=True)
+# Agora podemos plotar o gráfico sem esses outliers
 
 
 # Agora vamos colocar os titulos em 45º
 
-# In[45]:
+# In[27]:
 
 
-sns.boxplot(x="GenderSelect", y="CompensationAmount",
-            data=df[df['CompensationAmount'] < 2000000])
-sns.despine(offset=10, trim=True)
-plt.xticks(rotation=15)
+# titulos em 45º
 
 
 # ## Scatterplots (Dispersão)
 
 # ### E se eu quiser ver a distribuição da probabilidade das pessoas que aprenderam algo (da profissão) no Trabalho e que foram auto didatas? 
 
-# In[55]:
+# In[ ]:
 
 
-sns.jointplot(x="LearningCategorySelftTaught", y="LearningCategoryWork", data=df);
+# E se eu quiser ver LearningCategorySelftTaught e LearningCategoryWork ao mesmo tempo?
 
 
 # E o que eu posso fazer se eu quiser ver as probabilidades de todas as categorias `LearningCategory(...)` todas juntas?
 
-# In[71]:
+# In[28]:
 
 
-sns.kdeplot(df['LearningCategorySelftTaught'])
-sns.kdeplot(df['LearningCategoryWork'])
-sns.kdeplot(df['LearningCategoryOnlineCourses'])
-sns.kdeplot(df['LearningCategoryUniversity'])
-#sns.kdeplot(df['LearningCategoryKaggle'])
-sns.kdeplot(df['LearningCategoryOther'])
-plt.legend();
+# E as categorias LearningCategorySelftTaught, LearningCategoryWork, LearningCategoryOnlineCourses, LearningCategoryUniversity, LearningCategoryOther 
 
 
 # ## Desafio 4
